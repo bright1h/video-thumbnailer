@@ -1,0 +1,23 @@
+version: '3.7'
+services:
+  redis:
+    image: redis:4-alpine
+    ports:
+      - '6379:6379'
+  worker:
+    build:
+      context: m1
+    depends_on:
+      - "redis"
+    environment:
+      - REDIS_QUEUE=redis
+
+  queue-wrapper:
+    build:
+      context: m2
+    depends_on:
+      - "redis"
+    environment:
+      - REDIS_QUEUE=redis
+    ports:
+      - '5000:5000'

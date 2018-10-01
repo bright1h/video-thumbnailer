@@ -26,10 +26,7 @@ def extract_frames(input, tmp_dir):
     """
     print('Process: Extracting frames...')
     total_duration = get_video_duration(input)
-    ts = int(total_duration * 2 / 3.)
-    if ts < 5:
-        ts = 0
-    ts = str(ts)
+    ts = str(total_duration * 2 / 3)
     td = str(random.randint(6, 11))
     c = call(['ffmpeg', '-ss', ts, '-t', td, '-i', input, '-r', '10', "{}/ffout%03d.png".format(tmp_dir)])
     if c == 0:
