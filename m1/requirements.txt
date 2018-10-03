@@ -1,4 +1,4 @@
-requests
-moviepy
 Flask>=1.0
 redis==2.10
+requests
+moviepy

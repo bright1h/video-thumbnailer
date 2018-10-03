@@ -1,0 +1,3 @@
+[submodule "simple-object-storage"]
+	path = simple-object-storage
+	url = https://github.com/bright1h/simple-object-storage.git

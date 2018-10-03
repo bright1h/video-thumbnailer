@@ -1,5 +1,31 @@
 version: '3.7'
 services:
+  webapp:
+    build:
+      context: simple-object-storage
+    ports:
+    - 8080:8080
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://object-storage-mongo:27017/sos
+    depends_on:
+    - db
+    volumes:
+    - ./storage:/app/storage
+    container_name: object-storage-webapp
+    restart: on-failure
+
+  db:
+    image: mongo
+    container_name: object-storage-mongo
+    ports:
+    - 27017:27017
+    environment:
+    - MONGO_INITDB_DATABASE=sos
+    volumes:
+    - ./mongodb:/data/db
+    - ./mongoconfig:/data/configdb
+    restart: on-failure
+
   redis:
     image: redis:4-alpine
     ports:

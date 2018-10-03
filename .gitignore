@@ -1,4 +1,3 @@
-
 # Created by https://www.gitignore.io/api/python
 
 ### Python ###
@@ -131,3 +130,16 @@ pip-selfcheck.json
 
 
 # End of https://www.gitignore.io/api/python
+
+# My gitignore
+.idea/
+.vscode/
+storage/
+resources/
+mongodb/
+mongoconfig/
+m1/.idea/
+m1/venv
+m2/.idea/
+m2/venv
+

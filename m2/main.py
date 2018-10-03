@@ -6,7 +6,10 @@ import requests
 
 app = Flask(__name__)
 
-DIR = "./tmp/"
+BASE_URL = "http://webapp:8080"
+# BASE_URL = "http://localhost:8080"
+
+DIR = os.getcwd()+"/tmp/"
 
 
 class RedisResource:
@@ -22,50 +25,43 @@ class RedisResource:
     conn = redis.Redis(host=host, *port)
 
 
-def download_file_and_post_to_queue(bucket, object):
-    url = "http://localhost:8080/{}/{}".format(bucket, object)
-    r = requests.get(url, allow_redirects=True)
-    print(r.status_code)
-    if r.status_code == 200:
-        path = DIR + bucket + '/'
-        if not os.path.exists(path):
-            os.makedirs(path)
-        open(path + object, 'wb').write(r.content)
-        RedisResource.conn.rpush(
-            RedisResource.QUEUE_NAME,
-            json.dumps({
-                'path': path,
-                'bucket': bucket,
-                'fname': object,
-            }))
-        return 200
-    return r.status_code
-
-
 @app.route('/<bucket>/<object>', methods=['POST'])
 def post_object(bucket, object):
-    status = download_file_and_post_to_queue(bucket, object)
-    return jsonify({"status": status})
+    # status = download_file_and_post_to_queue(bucket, object)
+    RedisResource.conn.rpush(
+        RedisResource.QUEUE_NAME,
+        json.dumps({
+            'bucket': bucket,
+            'fname': object,
+        }))
+
+    return jsonify({"status": 200})
 
 
 @app.route('/<bucket>', methods=['POST'])
-def post_all_object(bucket):
-    url = "http://localhost:8080/{}?list".format(bucket)
+def post_all_vid(bucket):
+    url = "{}/{}?list".format(BASE_URL,bucket)
     r_bucket = requests.get(url)
     if r_bucket.status_code == 200:
         json_res = r_bucket.json()
         objects = json_res['objects']
         vids = [obj['name'] for obj in objects if ".mp4" in obj['name']]
         for vid_name in vids:
-            status = download_file_and_post_to_queue(bucket, vid_name)
-            if status != 200: return jsonify({"status": status})
+            RedisResource.conn.rpush(
+                RedisResource.QUEUE_NAME,
+                json.dumps({
+                    'bucket': bucket,
+                    'fname': vid_name,
+                }))
+            # status = download_file_and_post_to_queue(bucket, vid_name)
+            # if status != 200: return jsonify({"status": status})
 
     return jsonify({"status": r_bucket.status_code})
 
 
 @app.route('/<bucket>', methods=['GET'])
-def get_gifs(bucket):
-    url = "http://localhost:8080/{}?list".format(bucket)
+def get_gif_images(bucket):
+    url = "{}/{}?list".format(BASE_URL,bucket)
     r = requests.get(url)
     if r.status_code == 200:
         json_res = r.json()
