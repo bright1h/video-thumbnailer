@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head lang="en">
+        <meta charset="UTF-8">
+        <title>Show All Video</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <div class="container">
+            <a href="http://localhost:5000/" class="btn btn-danger" role="button"> Back</a>
+            <h1>All Videos in {{bucket}}</h1>
+
+            <table class="table">
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col">Video Name</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                  {% for vid in videos %}
+                  <tr>
+                      <td><h5>{{vid}}</h5></td>
+                      <td>
+                          <form method='post' action="http://localhost:5000/{{bucket}}/{{vid}}">
+                              <button type="submit" class="btn btn-secondary mx-auto">Generate GIF</button>
+                          </form>
+                      </td>
+                  </tr>
+                  {% endfor %}
+                  <tr class="bg-dark">
+                      <td>
+                          <a href="http://localhost:5000/{{bucket}}/show_all_gif" class="btn btn-danger mx-auto p-auto" role="button"> Display all gif images</a>
+                      </td>
+                      <td>
+                          <form method='post' action="http://localhost:5000/{{bucket}}" class="mx-auto p-auto">
+                                <button type="submit" class="btn btn-warning">Generate All GIF</button>
+                           </form>
+                      </td>
+                  </tr>
+              </tbody>
+            </table>
+
+        </div>
+
+
+  </body>
+</html>
