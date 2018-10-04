@@ -44,7 +44,7 @@ def post_object(bucket, object):
 
     return render_template("action_performed.html",
                            msg="You submit job to the queue",
-                           url="{}/{}/show_all_video".format(WEBSITE_BASE_URL,bucket))
+                           url="{}/{}/show_all_video".format(WEBSITE_BASE_URL, bucket))
 
 
 @app.route('/<bucket>/<object>/delete', methods=['POST'])
@@ -66,7 +66,7 @@ def post_all_vid(bucket):
     if r_bucket.status_code == 200:
         json_res = r_bucket.json()
         objects = json_res['objects']
-        vids = [obj['name'] for obj in objects if ".mp4" in obj['name']]
+        vids = [obj['name'] for obj in objects if obj['name'].split('.')[-1] in ("mp4", "avi", "mov")]
         for vid_name in vids:
             RedisResource.conn.rpush(
                 RedisResource.QUEUE_NAME,
@@ -102,7 +102,7 @@ def show_all_vid(bucket):
     if r.status_code == 200:
         json_res = r.json()
         objects = json_res['objects']
-        all_vids = [obj['name'] for obj in objects if ".mp4" in obj['name']]
+        all_vids = [obj['name'] for obj in objects if obj['name'].split('.')[-1] in ("mp4", "avi", "mov")]
         return render_template("show_all_videos.html", videos=all_vids, bucket=bucket)
 
     return render_template("action_performed.html",

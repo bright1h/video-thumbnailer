@@ -112,7 +112,7 @@ def make_gif(log, task):
     """
     bucket = task.get('bucket')
     fname = task.get('fname')
-    output = fname.replace('.mp4', '.gif')
+    output = fname.replace(fname.split('.')[-1], 'gif')
     path = DIR + bucket + '/'
     download_vid_status = download_file_and_post_to_queue(log, bucket, fname, path)
 
