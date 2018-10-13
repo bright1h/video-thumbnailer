@@ -103,7 +103,11 @@ def upload_gif(log, bucket, path, uploaded_file):
         log.info("Fail to complete the uploaded object, status : %d", r_complete.status_code)
         return
 
-    log.info("Done, %s is uploaded, status : 200", uploaded_file)
+    r_update_metadata = requests.put("{}/{}/{}?metadata&key=content-type".format(BASE_URL,bucket,uploaded_file), data="image/gif")
+    if r_update_metadata.status_code !=200:
+        log.info("Fail to update metadata")
+
+    log.info("%s is uploaded", uploaded_file)
 
 
 def make_gif(log, task):
