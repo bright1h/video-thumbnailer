@@ -53,7 +53,7 @@ def send_delete_object_request(bucket, object):
     r = requests.delete(url)
     msg = "You successfully deleted the file"
     if r.status_code != 200:
-        msg = "You successfully deleted the file"
+        msg = "You failed to deleted the file"
     return render_template("action_performed.html",
                            msg=msg,
                            url="{}/{}/show_all_gif".format(WEBSITE_BASE_URL, bucket))
